@@ -2,8 +2,10 @@
   "name": "graphql-lab",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch --loader ts-node/esm src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -11,5 +13,9 @@
   "description": "",
   "dependencies": {
     "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
   }
 }
