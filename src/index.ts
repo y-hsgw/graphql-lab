@@ -3,13 +3,40 @@ import express from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 
 const schema = buildSchema(`
+  type RandomDie {
+    numSides: Int!
+    rollOnce: Int!
+    roll(numRolls: Int!): [Int]
+  }
+
   type Query {
     quoteOfTheDay: String
     random: Float!
     rollThreeDice: [Int],
-    rollDice(numDice: Int!, numSides: Int): [Int]
+    rollDice(numDice: Int!, numSides: Int): [Int],
+    getDie(numSides: Int): RandomDie
   }
 `);
+
+class RandomDie {
+  numSides: number;
+
+  constructor(numSides: number) {
+    this.numSides = numSides;
+  }
+
+  rollOnce() {
+    return 1 + Math.floor(Math.random() * this.numSides);
+  }
+
+  roll({ numRolls }: { numRolls: number }) {
+    var output = [];
+    for (var i = 0; i < numRolls; i++) {
+      output.push(this.rollOnce());
+    }
+    return output;
+  }
+}
 
 const rootValue = {
   quoteOfTheDay() {
@@ -27,6 +54,9 @@ const rootValue = {
       output.push(1 + Math.floor(Math.random() * (args.numSides || 6)));
     }
     return output;
+  },
+  getDie({ numSides }: { numSides: number }) {
+    return new RandomDie(numSides || 6);
   },
 };
 
