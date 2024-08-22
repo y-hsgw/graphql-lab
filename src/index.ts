@@ -1,6 +1,7 @@
 import { buildSchema } from "graphql";
 import express from "express";
 import { createHandler } from "graphql-http/lib/use/express";
+import crypto from "crypto";
 
 const schema = buildSchema(`
   type RandomDie {
@@ -9,12 +10,29 @@ const schema = buildSchema(`
     roll(numRolls: Int!): [Int]
   }
 
+  input MessageInput {
+    content: String
+    author: String
+  }
+
+  type Message {
+    id: ID!
+    content: String
+    author: String
+  }
+
   type Query {
     quoteOfTheDay: String
     random: Float!
-    rollThreeDice: [Int],
-    rollDice(numDice: Int!, numSides: Int): [Int],
+    rollThreeDice: [Int]
+    rollDice(numDice: Int!, numSides: Int): [Int]
     getDie(numSides: Int): RandomDie
+    getMessage(id: ID!): Message
+  }
+
+  type Mutation {
+    createMessage(input: MessageInput): Message
+    updateMessage(id: ID!, input: MessageInput): Message
   }
 `);
 
@@ -30,7 +48,7 @@ class RandomDie {
   }
 
   roll({ numRolls }: { numRolls: number }) {
-    var output = [];
+    const output = [];
     for (var i = 0; i < numRolls; i++) {
       output.push(this.rollOnce());
     }
@@ -38,7 +56,42 @@ class RandomDie {
   }
 }
 
+type Input = { content: string; author: string };
+
+class Message {
+  id: string;
+  content: string;
+  author: string;
+
+  constructor(id: string, { content, author }: Input) {
+    this.id = id;
+    this.content = content;
+    this.author = author;
+  }
+}
+
+const fakeDatabase: Record<string, Input> = {};
+
 const rootValue = {
+  getMessage({ id }: { id: string }) {
+    if (!fakeDatabase[id]) {
+      throw new Error("no message exists with id " + id);
+    }
+    return new Message(id, fakeDatabase[id]);
+  },
+  createMessage({ input }: { input: Input }) {
+    const id = crypto.randomBytes(10).toString("hex");
+
+    fakeDatabase[id] = input;
+    return new Message(id, input);
+  },
+  updateMessage({ id, input }: { id: string; input: Input }) {
+    if (!fakeDatabase[id]) {
+      throw new Error("no message exists with id " + id);
+    }
+    fakeDatabase[id] = input;
+    return new Message(id, input);
+  },
   quoteOfTheDay() {
     return Math.random() < 0.5 ? "Take it easy" : "Salvation lies within";
   },
