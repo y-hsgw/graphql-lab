@@ -1,7 +1,53 @@
-import { buildSchema } from "graphql";
+import {
+  buildSchema,
+  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
+} from "graphql";
 import express, { NextFunction, Request, Response } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import crypto from "crypto";
+
+const userType = new GraphQLObjectType({
+  name: "User",
+  fields: {
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+  },
+});
+
+type User = {
+  id: string;
+  name: string;
+};
+
+const fakeUserDatabase: Record<string, User> = {
+  a: {
+    id: "a",
+    name: "alice",
+  },
+  b: {
+    id: "b",
+    name: "bob",
+  },
+};
+
+const queryType = new GraphQLObjectType({
+  name: "Query",
+  fields: {
+    user: {
+      type: userType,
+      args: {
+        id: { type: GraphQLString },
+      },
+      resolve: (_, { id }) => {
+        return fakeUserDatabase[id];
+      },
+    },
+  },
+});
 
 const schema = buildSchema(`
   type RandomDie {
@@ -122,12 +168,14 @@ function loggingMiddleware(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
+const graphQLSchema = new GraphQLSchema({ query: queryType });
+
 const app = express();
 app.use(loggingMiddleware);
 app.all(
   "/graphql",
   createHandler({
-    schema,
+    schema: graphQLSchema,
     rootValue,
     context: (req) => ({
       ip: req.raw.ip,
