@@ -1,6 +1,5 @@
 import {
   buildSchema,
-  GraphQLInt,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
@@ -40,7 +39,7 @@ const queryType = new GraphQLObjectType({
     user: {
       type: userType,
       args: {
-        id: { type: GraphQLString },
+        id: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (_, { id }) => {
         return fakeUserDatabase[id];
