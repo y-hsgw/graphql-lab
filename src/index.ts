@@ -1,5 +1,5 @@
 import { buildSchema } from "graphql";
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import crypto from "crypto";
 
@@ -28,6 +28,7 @@ const schema = buildSchema(`
     rollDice(numDice: Int!, numSides: Int): [Int]
     getDie(numSides: Int): RandomDie
     getMessage(id: ID!): Message
+    ip: String
   }
 
   type Mutation {
@@ -111,15 +112,26 @@ const rootValue = {
   getDie({ numSides }: { numSides: number }) {
     return new RandomDie(numSides || 6);
   },
+  ip(args: any, context: any) {
+    return context.ip;
+  },
 };
 
-const app = express();
+function loggingMiddleware(req: Request, res: Response, next: NextFunction) {
+  console.log("ip:", req.ip);
+  next();
+}
 
+const app = express();
+app.use(loggingMiddleware);
 app.all(
   "/graphql",
   createHandler({
     schema,
     rootValue,
+    context: (req) => ({
+      ip: req.raw.ip,
+    }),
   })
 );
 
