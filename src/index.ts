@@ -1,5 +1,6 @@
 import {
   buildSchema,
+  GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLSchema,
@@ -8,14 +9,6 @@ import {
 import express, { NextFunction, Request, Response } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import crypto from "crypto";
-
-const userType = new GraphQLObjectType({
-  name: "User",
-  fields: {
-    id: { type: GraphQLString },
-    name: { type: GraphQLString },
-  },
-});
 
 type User = {
   id: string;
@@ -33,9 +26,23 @@ const fakeUserDatabase: Record<string, User> = {
   },
 };
 
+const userType = new GraphQLObjectType({
+  name: "User",
+  fields: {
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+  },
+});
+
 const queryType = new GraphQLObjectType({
   name: "Query",
   fields: {
+    users: {
+      type: new GraphQLList(userType),
+      resolve: () => {
+        return Object.values(fakeUserDatabase);
+      },
+    },
     user: {
       type: userType,
       args: {
