@@ -52,6 +52,34 @@ const queryType = new GraphQLObjectType({
         return fakeUserDatabase[id];
       },
     },
+    createUser: {
+      type: userType,
+      args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_, { name }) => {
+        const id = crypto.randomBytes(10).toString("hex");
+        fakeUserDatabase[id] = { id, name };
+        return fakeUserDatabase[id];
+      },
+    },
+  },
+});
+
+const mutationType = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    createUser: {
+      type: userType,
+      args: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_, { name }) => {
+        const id = crypto.randomBytes(10).toString("hex");
+        fakeUserDatabase[id] = { id, name };
+        return fakeUserDatabase[id];
+      },
+    },
   },
 });
 
@@ -174,7 +202,10 @@ function loggingMiddleware(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
-const graphQLSchema = new GraphQLSchema({ query: queryType });
+const graphQLSchema = new GraphQLSchema({
+  query: queryType,
+  mutation: mutationType,
+});
 
 const app = express();
 app.use(loggingMiddleware);
@@ -189,5 +220,6 @@ app.all(
   })
 );
 
-app.listen(4000);
-console.log("Running a GraphQL API server at http://localhost:4000/graphql");
+const PORT = 4000;
+app.listen(PORT);
+console.log(`Running a GraphQL API server at http://localhost:${PORT}/graphql`);
