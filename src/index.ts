@@ -37,6 +37,12 @@ const userType = new GraphQLObjectType({
 const queryType = new GraphQLObjectType({
   name: "Query",
   fields: {
+    ip: {
+      type: GraphQLString,
+      resolve: (_, args, context: { ip: string }) => {
+        return context.ip;
+      },
+    },
     users: {
       type: new GraphQLList(userType),
       resolve: () => {
@@ -49,17 +55,6 @@ const queryType = new GraphQLObjectType({
         id: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (_, { id }) => {
-        return fakeUserDatabase[id];
-      },
-    },
-    createUser: {
-      type: userType,
-      args: {
-        name: { type: new GraphQLNonNull(GraphQLString) },
-      },
-      resolve: (_, { name }) => {
-        const id = crypto.randomBytes(10).toString("hex");
-        fakeUserDatabase[id] = { id, name };
         return fakeUserDatabase[id];
       },
     },
