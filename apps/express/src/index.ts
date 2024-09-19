@@ -4,10 +4,10 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
-} from "graphql";
-import express, { NextFunction, Request, Response } from "express";
-import { createHandler } from "graphql-http/lib/use/express";
-import crypto from "crypto";
+} from 'graphql';
+import express, { NextFunction, Request, Response } from 'express';
+import { createHandler } from 'graphql-http/lib/use/express';
+import crypto from 'crypto';
 
 type User = {
   id: string;
@@ -16,17 +16,17 @@ type User = {
 
 const fakeUserDatabase: Record<string, User> = {
   a: {
-    id: "a",
-    name: "alice",
+    id: 'a',
+    name: 'alice',
   },
   b: {
-    id: "b",
-    name: "bob",
+    id: 'b',
+    name: 'bob',
   },
 };
 
 const userType = new GraphQLObjectType({
-  name: "User",
+  name: 'User',
   fields: {
     id: { type: GraphQLString },
     name: { type: GraphQLString },
@@ -34,7 +34,7 @@ const userType = new GraphQLObjectType({
 });
 
 const queryType = new GraphQLObjectType({
-  name: "Query",
+  name: 'Query',
   fields: {
     ip: {
       type: GraphQLString,
@@ -61,7 +61,7 @@ const queryType = new GraphQLObjectType({
 });
 
 const mutationType = new GraphQLObjectType({
-  name: "Mutation",
+  name: 'Mutation',
   fields: {
     createUser: {
       type: userType,
@@ -69,7 +69,7 @@ const mutationType = new GraphQLObjectType({
         name: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (_, { name }) => {
-        const id = crypto.randomBytes(10).toString("hex");
+        const id = crypto.randomBytes(10).toString('hex');
         fakeUserDatabase[id] = { id, name };
         return fakeUserDatabase[id];
       },
@@ -78,7 +78,7 @@ const mutationType = new GraphQLObjectType({
 });
 
 function loggingMiddleware(req: Request, res: Response, next: NextFunction) {
-  console.log("ip:", req.ip);
+  console.log('ip:', req.ip);
   next();
 }
 
@@ -90,15 +90,15 @@ const graphQLSchema = new GraphQLSchema({
 const app = express();
 app.use(loggingMiddleware);
 app.all(
-  "/graphql",
+  '/graphql',
   createHandler({
     schema: graphQLSchema,
     context: (req) => ({
       ip: req.raw.ip,
     }),
-  })
+  }),
 );
 
 const PORT = 4000;
 app.listen(PORT);
-console.log(`Running a GraphQL API server at http://localhost:${PORT}/graphql`);
+console.log('Running a GraphQL API server at http://localhost:${PORT}/graphql');
