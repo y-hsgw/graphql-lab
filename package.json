@@ -5,7 +5,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "node --watch --loader ts-node/esm src/index.ts"
+    "build": "tsc -p ./tsconfig.json",
+    "build:watch": "npm run build -- -w",
+    "predev": "npm run build",
+    "dev": "npm run build:watch & node --watch ./dist/index.js &"
   },
   "keywords": [],
   "author": "",

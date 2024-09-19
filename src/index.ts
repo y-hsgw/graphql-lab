@@ -1,5 +1,4 @@
 import {
-  buildSchema,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
