@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "target": "ES2022",
+    "target": "ES2023",
     "module": "NodeNext",
     "esModuleInterop": true,
     "strict": true,

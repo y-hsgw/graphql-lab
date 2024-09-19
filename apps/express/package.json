@@ -1,0 +1,25 @@
+{
+  "name": "graphql-lab-express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "build:watch": "npm run build -- -w",
+    "predev": "npm run build",
+    "dev": "node  --watch dist/index.js & npm run build:watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "description": "",
+  "dependencies": {
+    "graphql": "^16.9.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "express": "^4.21.0",
+    "graphql-http": "^1.22.1"
+  }
+}
