@@ -5,7 +5,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev:express": "npm run dev -w apps/express"
+    "dev:express": "npm run dev -w apps/express",
+    "dev:nextjs": "npm run dev -w apps/nextjs"
   },
   "keywords": [],
   "author": "",
