@@ -1,7 +1,28 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Image from 'next/image';
+import styles from './page.module.css';
+import { gql } from 'urql';
+import { getClient } from '@/lib/urql';
 
-export default function Home() {
+const PokemonsQuery = gql`
+  query {
+    pokemons(limit: 10) {
+      id
+      name
+    }
+  }
+`;
+
+interface Pokemon {
+  id: string;
+  name: string;
+}
+
+export default async function Home() {
+  const { data } = await getClient().query<{ pokemons: Pokemon[] }>(
+    PokemonsQuery,
+    {},
+  );
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -14,10 +35,7 @@ export default function Home() {
           priority
         />
         <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
+          {data?.pokemons.map((item) => <li key={item.id}>{item.name}</li>)}
         </ol>
 
         <div className={styles.ctas}>
