@@ -12,6 +12,7 @@
     "generate": "graphql-codegen"
   },
   "dependencies": {
+    "@urql/exchange-persisted": "^4.3.0",
     "@urql/next": "^1.1.2",
     "next": "14.2.12",
     "react": "^18",
