@@ -1,27 +1,23 @@
 import Image from 'next/image';
 import styles from './page.module.css';
-import { gql } from 'urql';
 import { getClient } from '@/lib/urql';
+import { graphql } from '@/lib/gql';
 
-const PokemonsQuery = gql`
-  query {
+const PokemonsQuery = graphql(`
+  query getPokemons {
     pokemons(limit: 10) {
       id
       name
     }
   }
-`;
-
-interface Pokemon {
-  id: string;
-  name: string;
-}
+`);
 
 export default async function Home() {
-  const { data } = await getClient().query<{ pokemons: Pokemon[] }>(
-    PokemonsQuery,
-    {},
-  );
+  const { data } = await getClient().query(PokemonsQuery, {});
+
+  if (!data?.pokemons) {
+    return <dialog>aa</dialog>;
+  }
 
   return (
     <div className={styles.page}>
@@ -35,7 +31,7 @@ export default async function Home() {
           priority
         />
         <ol>
-          {data?.pokemons.map((item) => <li key={item.id}>{item.name}</li>)}
+          {data?.pokemons.map((item) => <li key={item?.id}>{item?.name}</li>)}
         </ol>
 
         <div className={styles.ctas}>
