@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "dev:express": "npm run dev -w apps/express",
+    "dev:nestjs": "npm run start:dev -w apps/nestjs",
     "dev:nextjs": "npm run dev -w apps/nextjs"
   },
   "keywords": [],
