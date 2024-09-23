@@ -1,20 +1,18 @@
 import { Module } from '@nestjs/common';
+import { join } from 'node:path';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MercuriusDriver, type MercuriusDriverConfig } from '@nestjs/mercurius';
 import { AuthorsModule } from './authors/authors.module.js';
-import mercurius from 'mercurius';
-import persistedQueries from '../persisted-documents.json' assert { type: 'json' };
+import persistedQueries from './persisted-documents.json' assert { type: 'json' };
 
 @Module({
   imports: [
     GraphQLModule.forRoot<MercuriusDriverConfig>({
       driver: MercuriusDriver,
-      autoSchemaFile: true,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      graphiql: true,
+      onlyPersisted: true,
       persistedQueries,
-      persistedQueryProvider:
-        mercurius.persistedQueryDefaults.prepared(persistedQueries),
     }),
     AuthorsModule,
   ],
