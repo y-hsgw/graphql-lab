@@ -1,3 +1,3 @@
 {
-  "dbd534b5ea6cb92203c5e10b3893f132435ac1d6": "query getAuthor { author(id: 1) { firstName id lastName posts { id title } } }"
+  "35b092803aa4280c2a30a46f843a1333f4c9b27e": "query getAuthor($id: Int!) { author(id: $id) { firstName id lastName posts { id title } } }"
 }

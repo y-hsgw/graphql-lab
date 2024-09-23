@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import styles from './page.module.css';
-import { getClient } from '@/lib/urql';
 import { graphql } from '@/lib/gql';
+import { getClient } from '@/lib/urql';
 
 const query = graphql(`
-  query getAuthor {
-    author(id: 1) {
+  query getAuthor($id: Int!) {
+    author(id: $id) {
       id
       firstName
       lastName
@@ -18,10 +18,10 @@ const query = graphql(`
 `);
 
 export default async function Home() {
-  const { data } = await getClient().query(query, {});
+  const { data } = await getClient().query(query, { id: 1 });
 
   if (!data?.author) {
-    return <dialog>aa</dialog>;
+    return <div>NotFound</div>;
   }
 
   return (

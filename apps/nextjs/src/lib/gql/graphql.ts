@@ -57,7 +57,9 @@ export type QueryAuthorArgs = {
   offset?: Scalars['Int']['input'];
 };
 
-export type GetAuthorQueryVariables = Exact<{ [key: string]: never }>;
+export type GetAuthorQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
 
 export type GetAuthorQuery = {
   __typename?: 'Query';
@@ -71,13 +73,23 @@ export type GetAuthorQuery = {
 };
 
 export const GetAuthorDocument = {
-  __meta__: { hash: 'dbd534b5ea6cb92203c5e10b3893f132435ac1d6' },
+  __meta__: { hash: '35b092803aa4280c2a30a46f843a1333f4c9b27e' },
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
       name: { kind: 'Name', value: 'getAuthor' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
@@ -88,7 +100,10 @@ export const GetAuthorDocument = {
               {
                 kind: 'Argument',
                 name: { kind: 'Name', value: 'id' },
-                value: { kind: 'IntValue', value: '1' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
               },
             ],
             selectionSet: {
