@@ -13,6 +13,7 @@
     "type:check": "tsc --noEmit"
   },
   "dependencies": {
+    "@next/env": "^14.2.13",
     "@urql/exchange-persisted": "^4.3.0",
     "@urql/next": "^1.1.2",
     "next": "14.2.12",
