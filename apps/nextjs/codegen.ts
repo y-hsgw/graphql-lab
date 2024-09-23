@@ -4,7 +4,7 @@ import { loadEnvConfig } from '@next/env';
 loadEnvConfig(process.cwd());
 
 const config: CodegenConfig = {
-  schema: process.env.NESTJS_API,
+  schema: '../nestjs/src/schema.gql',
   documents: ['src/**/*.tsx'],
   generates: {
     './src/lib/gql/': {
@@ -13,6 +13,9 @@ const config: CodegenConfig = {
         persistedDocuments: true,
       },
     },
+  },
+  hooks: {
+    afterAllFileWrite: 'prettier --write',
   },
 };
 export default config;
