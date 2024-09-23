@@ -3,19 +3,24 @@ import styles from './page.module.css';
 import { getClient } from '@/lib/urql';
 import { graphql } from '@/lib/gql';
 
-const PokemonsQuery = graphql(`
-  query getPokemons {
-    pokemons(limit: 10) {
+const query = graphql(`
+  query getAuthor {
+    author(id: 1) {
       id
-      name
+      firstName
+      lastName
+      posts {
+        id
+        title
+      }
     }
   }
 `);
 
 export default async function Home() {
-  const { data } = await getClient().query(PokemonsQuery, {});
+  const { data } = await getClient().query(query, {});
 
-  if (!data?.pokemons) {
+  if (!data?.author) {
     return <dialog>aa</dialog>;
   }
 
@@ -31,7 +36,9 @@ export default async function Home() {
           priority
         />
         <ol>
-          {data?.pokemons.map((item) => <li key={item?.id}>{item?.name}</li>)}
+          {data.author.posts.map((item) => (
+            <li key={item?.id}>{item?.title}</li>
+          ))}
         </ol>
 
         <div className={styles.ctas}>

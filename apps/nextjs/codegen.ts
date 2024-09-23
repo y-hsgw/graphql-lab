@@ -1,11 +1,14 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
-  schema: 'https://trygql.formidable.dev/graphql/basic-pokedex',
+  schema: 'http://localhost:8080/graphql',
   documents: ['src/**/*.tsx'],
   generates: {
     './src/lib/gql/': {
       preset: 'client',
+      presetConfig: {
+        persistedDocuments: true,
+      },
     },
   },
 };

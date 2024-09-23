@@ -16,99 +16,39 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
-/** Move a Pokémon can perform with the associated damage and type. */
-export type Attack = {
-  __typename?: 'Attack';
-  damage?: Maybe<Scalars['Int']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<PokemonType>;
+export type Author = {
+  __typename?: 'Author';
+  firstName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  /** 投稿リスト */
+  posts: Array<Post>;
 };
 
-export type AttacksConnection = {
-  __typename?: 'AttacksConnection';
-  fast?: Maybe<Array<Maybe<Attack>>>;
-  special?: Maybe<Array<Maybe<Attack>>>;
+export type Post = {
+  __typename?: 'Post';
+  id: Scalars['Int']['output'];
+  title: Scalars['String']['output'];
+  votes?: Maybe<Scalars['Int']['output']>;
 };
-
-/** Requirement that prevents an evolution through regular means of levelling up. */
-export type EvolutionRequirement = {
-  __typename?: 'EvolutionRequirement';
-  amount?: Maybe<Scalars['Int']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-};
-
-export type Pokemon = {
-  __typename?: 'Pokemon';
-  attacks?: Maybe<AttacksConnection>;
-  classification?: Maybe<Scalars['String']['output']>;
-  evolutionRequirements?: Maybe<Array<Maybe<EvolutionRequirement>>>;
-  evolutions?: Maybe<Array<Maybe<Pokemon>>>;
-  /** Likelihood of an attempt to catch a Pokémon to fail. */
-  fleeRate?: Maybe<Scalars['Float']['output']>;
-  height?: Maybe<PokemonDimension>;
-  id: Scalars['ID']['output'];
-  /** Maximum combat power a Pokémon may achieve at max level. */
-  maxCP?: Maybe<Scalars['Int']['output']>;
-  /** Maximum health points a Pokémon may achieve at max level. */
-  maxHP?: Maybe<Scalars['Int']['output']>;
-  name: Scalars['String']['output'];
-  resistant?: Maybe<Array<Maybe<PokemonType>>>;
-  types?: Maybe<Array<Maybe<PokemonType>>>;
-  weaknesses?: Maybe<Array<Maybe<PokemonType>>>;
-  weight?: Maybe<PokemonDimension>;
-};
-
-export type PokemonDimension = {
-  __typename?: 'PokemonDimension';
-  maximum?: Maybe<Scalars['String']['output']>;
-  minimum?: Maybe<Scalars['String']['output']>;
-};
-
-/** Elemental property associated with either a Pokémon or one of their moves. */
-export enum PokemonType {
-  Bug = 'Bug',
-  Dark = 'Dark',
-  Dragon = 'Dragon',
-  Electric = 'Electric',
-  Fairy = 'Fairy',
-  Fighting = 'Fighting',
-  Fire = 'Fire',
-  Flying = 'Flying',
-  Ghost = 'Ghost',
-  Grass = 'Grass',
-  Ground = 'Ground',
-  Ice = 'Ice',
-  Normal = 'Normal',
-  Poison = 'Poison',
-  Psychic = 'Psychic',
-  Rock = 'Rock',
-  Steel = 'Steel',
-  Water = 'Water'
-}
 
 export type Query = {
   __typename?: 'Query';
-  /** Get a single Pokémon by its ID, a three character long identifier padded with zeroes */
-  pokemon?: Maybe<Pokemon>;
-  /** List out all Pokémon, optionally in pages */
-  pokemons?: Maybe<Array<Maybe<Pokemon>>>;
+  /** 著者 */
+  author?: Maybe<Author>;
 };
 
 
-export type QueryPokemonArgs = {
-  id: Scalars['ID']['input'];
+export type QueryAuthorArgs = {
+  id: Scalars['Int']['input'];
+  limit?: Scalars['Int']['input'];
+  offset?: Scalars['Int']['input'];
 };
 
-
-export type QueryPokemonsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type GetPokemonsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAuthorQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPokemonsQuery = { __typename?: 'Query', pokemons?: Array<{ __typename?: 'Pokemon', id: string, name: string } | null> | null };
+export type GetAuthorQuery = { __typename?: 'Query', author?: { __typename?: 'Author', id: number, firstName?: string | null, lastName?: string | null, posts: Array<{ __typename?: 'Post', id: number, title: string }> } | null };
 
 
-export const GetPokemonsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getPokemons"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pokemons"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"IntValue","value":"10"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetPokemonsQuery, GetPokemonsQueryVariables>;
+export const GetAuthorDocument = {"__meta__":{"hash":"dbd534b5ea6cb92203c5e10b3893f132435ac1d6"},"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getAuthor"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"IntValue","value":"1"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]} as unknown as DocumentNode<GetAuthorQuery, GetAuthorQueryVariables>;
