@@ -5,7 +5,11 @@ import {
   GraphQLSchema,
   GraphQLString,
 } from 'graphql';
-import express, { NextFunction, Request, Response } from 'express';
+import express, {
+  type NextFunction,
+  type Request,
+  type Response,
+} from 'express';
 import { createHandler } from 'graphql-http/lib/use/express';
 import crypto from 'crypto';
 

@@ -7,7 +7,8 @@
   "scripts": {
     "dev:express": "npm run dev -w apps/express",
     "dev:nestjs": "npm run start:dev -w apps/nestjs",
-    "dev:nextjs": "npm run dev -w apps/nextjs"
+    "dev:nextjs": "npm run dev -w apps/nextjs",
+    "type:check": "npm run type:check -ws"
   },
   "keywords": [],
   "author": "",
