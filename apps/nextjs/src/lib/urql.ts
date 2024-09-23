@@ -3,7 +3,7 @@ import { registerUrql } from '@urql/next/rsc';
 
 const makeClient = () =>
   createClient({
-    url: 'https://trygql.formidable.dev/graphql/basic-pokedex',
+    url: process.env.NESTJS_API ?? '',
     exchanges: [cacheExchange, fetchExchange],
   });
 
