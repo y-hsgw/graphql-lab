@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import styles from './page.module.css';
 import { graphql } from '@/lib/gql';
-import { getClient } from '@/lib/urql';
+import { fetchPersistedQuery } from '@/lib/fetch';
 
 const query = graphql(`
   query getAuthor($id: Int!) {
@@ -18,9 +18,9 @@ const query = graphql(`
 `);
 
 export default async function Home() {
-  const { data } = await getClient().query(query, { id: 1 });
+  const { data } = await fetchPersistedQuery(query, { id: 1 });
 
-  if (!data?.author) {
+  if (!data.author) {
     return <div>NotFound</div>;
   }
 
@@ -37,7 +37,7 @@ export default async function Home() {
         />
         <ol>
           {data.author.posts.map((item) => (
-            <li key={item?.id}>{item?.title}</li>
+            <li key={item.id}>{item.title}</li>
           ))}
         </ol>
 
