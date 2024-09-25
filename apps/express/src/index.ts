@@ -12,6 +12,7 @@ import express, {
 } from 'express';
 import { createHandler } from 'graphql-http/lib/use/express';
 import crypto from 'crypto';
+import { ruruHTML } from 'ruru/server';
 
 type User = {
   id: string;
@@ -93,6 +94,7 @@ const graphQLSchema = new GraphQLSchema({
 
 const app = express();
 app.use(loggingMiddleware);
+
 app.all(
   '/graphql',
   createHandler({
@@ -103,6 +105,11 @@ app.all(
   }),
 );
 
+app.get('/graphiql', (_req, res) => {
+  res.type('html');
+  res.end(ruruHTML({ endpoint: '/graphql' }));
+});
+
 const PORT = 4000;
 app.listen(PORT);
-console.log('Running a GraphQL API server at http://localhost:${PORT}/graphql');
+console.log(`Running a GraphQL API server at http://localhost:${PORT}/graphql`);
