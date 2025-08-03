@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MercuriusDriver, type MercuriusDriverConfig } from '@nestjs/mercurius';
 import { AuthorsModule } from './authors/authors.module.js';
-import persistedQueries from './persisted-documents.json' assert { type: 'json' };
+import persistedQueries from './persisted-documents.json' with { type: 'json' };
 
 @Module({
   imports: [

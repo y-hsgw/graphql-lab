@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import styles from './page.module.css';
 import { graphql } from '@/lib/gql';
-import { fetchPersistedQuery } from '@/lib/fetch';
+import { getClient } from '@/lib/urql';
 
 const query = graphql(`
   query getAuthor($id: Int!) {
@@ -18,9 +18,10 @@ const query = graphql(`
 `);
 
 export default async function Home() {
-  const { data } = await fetchPersistedQuery(query, { id: 1 });
+  const { data } = await getClient().query(query, { id: 1000000000 });
+  console.log('data', data);
 
-  if (!data.author) {
+  if (!data?.author) {
     return <div>NotFound</div>;
   }
 
